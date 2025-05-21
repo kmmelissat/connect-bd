@@ -8,8 +8,9 @@ A NestJS-based REST API for managing tasks and users with PostgreSQL database.
 - Task management (CRUD operations)
 - Swagger API documentation
 - PostgreSQL database integration
-- Input validation
+- Input validation using class-validator
 - TypeORM for database operations
+- DTOs for request validation
 
 ## Prerequisites
 
@@ -35,7 +36,7 @@ npm install
 3. Make sure PostgreSQL is running and create the database:
 
 ```bash
-createdb apicurso1
+createdb apicurso
 ```
 
 ## Running the Application
@@ -64,8 +65,8 @@ Swagger documentation is available at `http://localhost:3000/docs`
 - `POST /users` - Create a new user
   ```json
   {
-    "name": "John Doe",
-    "email": "john@example.com"
+    "name": "John Doe", // Required, minimum 2 characters
+    "email": "john@example.com" // Required, valid email format
   }
   ```
 
@@ -76,10 +77,24 @@ Swagger documentation is available at `http://localhost:3000/docs`
 - `POST /tasks` - Create a new task
   ```json
   {
-    "title": "Learn NestJS",
-    "userId": 1
+    "title": "Learn NestJS", // Required, minimum 3 characters
+    "userId": 1 // Required, must be a number
   }
   ```
+
+## Data Validation
+
+The API uses class-validator for input validation:
+
+### User Validation
+
+- Name: Required, minimum 2 characters
+- Email: Required, must be a valid email format
+
+### Task Validation
+
+- Title: Required, minimum 3 characters
+- UserId: Required, must be a number
 
 ## Database Configuration
 
@@ -102,11 +117,15 @@ src/
 ├── tasks/              # Tasks module
 │   ├── tasks.controller.ts
 │   ├── tasks.service.ts
-│   └── task.entity.ts
+│   ├── task.entity.ts
+│   └── dto/
+│       └── create-task.dto.ts
 └── users/              # Users module
     ├── users.controller.ts
     ├── users.service.ts
-    └── user.entity.ts
+    ├── user.entity.ts
+    └── dto/
+        └── create-user.dto.ts
 ```
 
 ## Technologies Used
@@ -118,3 +137,6 @@ src/
 - class-validator
 - class-transformer
 
+## License
+
+MIT

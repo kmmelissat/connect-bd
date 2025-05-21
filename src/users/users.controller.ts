@@ -9,6 +9,7 @@ import {
 import { UsersService } from './users.service';
 import { User } from './user.entity';
 import { ApiTags, ApiOperation, ApiResponse } from '@nestjs/swagger';
+import { CreateUserDto } from './dto/create-user.dto';
 
 @ApiTags('users')
 @Controller('users')
@@ -37,10 +38,10 @@ export class UsersController {
     description: 'The user has been successfully created',
     type: User,
   })
-  async createUser(
-    @Body('name') name: string,
-    @Body('email') email: string,
-  ): Promise<User> {
-    return this.usersService.createUser(name, email);
+  async createUser(@Body() createUserDto: CreateUserDto): Promise<User> {
+    return this.usersService.createUser(
+      createUserDto.name,
+      createUserDto.email,
+    );
   }
 }

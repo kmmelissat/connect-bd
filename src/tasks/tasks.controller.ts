@@ -9,6 +9,7 @@ import {
 import { TasksService } from './tasks.service';
 import { Task } from './task.entity';
 import { ApiTags, ApiOperation, ApiResponse } from '@nestjs/swagger';
+import { CreateTaskDto } from './dto/create-task.dto';
 
 @ApiTags('tasks')
 @Controller('tasks')
@@ -37,10 +38,10 @@ export class TasksController {
     description: 'The task has been successfully created',
     type: Task,
   })
-  async createTask(
-    @Body('title') title: string,
-    @Body('userId', ParseIntPipe) userId: number,
-  ): Promise<Task> {
-    return this.tasksService.createTask(title, userId);
+  async createTask(@Body() createTaskDto: CreateTaskDto): Promise<Task> {
+    return this.tasksService.createTask(
+      createTaskDto.title,
+      createTaskDto.userId,
+    );
   }
 }
