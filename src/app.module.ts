@@ -15,7 +15,7 @@ import { User } from './users/user.entity';
       port: 5432,
       username: 'postgres',
       password: '',
-      database: 'apicurso',
+      database: 'apicurso1',
       entities: [User, Task],
       synchronize: true,
       logging: true,
