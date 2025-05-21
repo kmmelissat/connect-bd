@@ -2,6 +2,8 @@ import {
   Controller,
   Get,
   Post,
+  Put,
+  Delete,
   Body,
   Param,
   ParseIntPipe,
@@ -38,10 +40,38 @@ export class UsersController {
     description: 'The user has been successfully created',
     type: User,
   })
+  @ApiResponse({ status: 409, description: 'Email already exists' })
   async createUser(@Body() createUserDto: CreateUserDto): Promise<User> {
     return this.usersService.createUser(
       createUserDto.name,
       createUserDto.email,
     );
+  }
+
+  @Put(':id')
+  @ApiOperation({ summary: 'Update a user by id' })
+  @ApiResponse({
+    status: 200,
+    description: 'The user has been successfully updated',
+    type: User,
+  })
+  @ApiResponse({ status: 404, description: 'User not found' })
+  @ApiResponse({ status: 409, description: 'Email already exists' })
+  async updateUser(
+    @Param('id', ParseIntPipe) id: number,
+    @Body() updateUserDto: CreateUserDto,
+  ): Promise<User> {
+    return this.usersService.updateUser(id, updateUserDto);
+  }
+
+  @Delete(':id')
+  @ApiOperation({ summary: 'Delete a user by id' })
+  @ApiResponse({
+    status: 200,
+    description: 'The user has been successfully deleted',
+  })
+  @ApiResponse({ status: 404, description: 'User not found' })
+  async deleteUser(@Param('id', ParseIntPipe) id: number): Promise<void> {
+    return this.usersService.deleteUser(id);
   }
 }

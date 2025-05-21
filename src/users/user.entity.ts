@@ -1,8 +1,15 @@
-import { Entity, PrimaryGeneratedColumn, Column, OneToMany } from 'typeorm';
+import {
+  Entity,
+  PrimaryGeneratedColumn,
+  Column,
+  OneToMany,
+  Unique,
+} from 'typeorm';
 import { Task } from '../tasks/task.entity';
 import { ApiProperty } from '@nestjs/swagger';
 
 @Entity()
+@Unique(['email'])
 export class User {
   @ApiProperty({ description: 'The unique identifier of the user' })
   @PrimaryGeneratedColumn()
@@ -13,7 +20,7 @@ export class User {
   name: string;
 
   @ApiProperty({ description: 'The email of the user' })
-  @Column()
+  @Column({ unique: true })
   email: string;
 
   @ApiProperty({

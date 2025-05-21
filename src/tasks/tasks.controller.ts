@@ -5,11 +5,14 @@ import {
   Body,
   Param,
   ParseIntPipe,
+  Put,
+  Delete,
 } from '@nestjs/common';
 import { TasksService } from './tasks.service';
 import { Task } from './task.entity';
 import { ApiTags, ApiOperation, ApiResponse } from '@nestjs/swagger';
 import { CreateTaskDto } from './dto/create-task.dto';
+import { UpdateTaskDto } from './dto/update-task.dto';
 
 @ApiTags('tasks')
 @Controller('tasks')
@@ -43,5 +46,31 @@ export class TasksController {
       createTaskDto.title,
       createTaskDto.userId,
     );
+  }
+
+  @Put(':id')
+  @ApiOperation({ summary: 'Update a task' })
+  @ApiResponse({
+    status: 200,
+    description: 'The task has been successfully updated',
+    type: Task,
+  })
+  @ApiResponse({ status: 404, description: 'Task not found' })
+  async updateTask(
+    @Param('id', ParseIntPipe) id: number,
+    @Body() updateTaskDto: UpdateTaskDto,
+  ): Promise<Task> {
+    return this.tasksService.updateTask(id, updateTaskDto);
+  }
+
+  @Delete(':id')
+  @ApiOperation({ summary: 'Delete a task' })
+  @ApiResponse({
+    status: 200,
+    description: 'The task has been successfully deleted',
+  })
+  @ApiResponse({ status: 404, description: 'Task not found' })
+  async deleteTask(@Param('id', ParseIntPipe) id: number): Promise<void> {
+    return this.tasksService.deleteTask(id);
   }
 }
